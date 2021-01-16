@@ -16,4 +16,6 @@
         <constructor-arg name="repository" ref="bookRepo"/>
     </bean>
 
+    <!-- Бин для аспекта -->
+    <bean id="xmlAspectBean" class="ru.geekbrains.library.aspect.AnnotationAspectSample"/>
 </beans>

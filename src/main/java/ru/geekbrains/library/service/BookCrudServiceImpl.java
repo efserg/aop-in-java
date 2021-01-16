@@ -3,9 +3,12 @@ package ru.geekbrains.library.service;
 import java.util.List;
 import java.util.function.Predicate;
 
+import ru.geekbrains.library.annotation.Auth;
+import ru.geekbrains.library.annotation.PerformanceTracing;
 import ru.geekbrains.library.exception.BookAlreadyExistException;
 import ru.geekbrains.library.exception.BookNotFoundException;
 import ru.geekbrains.library.model.Book;
+import ru.geekbrains.library.model.User;
 import ru.geekbrains.library.repository.BookRepository;
 import ru.geekbrains.library.repository.BookRepositoryInMemoryImpl;
 
@@ -22,6 +25,7 @@ public class BookCrudServiceImpl implements BookCrudService {
     }
 
     @Override
+    @PerformanceTracing
     public Book get(final String isbn) {
         return repository.findByIsbn(isbn).orElseThrow(BookNotFoundException::new);
     }
@@ -32,6 +36,7 @@ public class BookCrudServiceImpl implements BookCrudService {
     }
 
     @Override
+    @Auth(role = User.Role.ADMIN)
     public Book create(final String isbn, final List<String> authors, final String title, final Integer pages, final String publisher) {
         repository.findByIsbn(isbn).ifPresent(book -> {
             throw new BookAlreadyExistException();
