@@ -10,10 +10,20 @@
 <!--    Надо включить АОП -->
     <aop:aspectj-autoproxy/>
 
+    <aop:config>
+        <aop:pointcut id="logPointcut" expression="execution(* ru.geekbrains.library.service.BookCrudServiceImpl.*(..))"/>
+        <aop:aspect id="xmlAspect" ref="xmlAspectBean">
+            <aop:before pointcut-ref="logPointcut" method="beforeLogAdviceSample"/>
+        </aop:aspect>
+    </aop:config>
+    <aop:aspectj-autoproxy/>
+
 <!--    Описываем бины -->
     <bean id="bookRepo" class="ru.geekbrains.library.repository.BookRepositoryInMemoryImpl"/>
     <bean id="bookService" class="ru.geekbrains.library.service.BookCrudServiceImpl">
         <constructor-arg name="repository" ref="bookRepo"/>
     </bean>
 
+    <!-- Бин для аспекта -->
+    <bean id="xmlAspectBean" class="ru.geekbrains.library.aspect.XmlAspectConfigSample"/>
 </beans>
